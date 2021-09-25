@@ -15,6 +15,7 @@ import os
 import progressbar
 import pickle
 
+import re 
 
 from hazm import  word_tokenize
 
@@ -79,7 +80,8 @@ numbers=[f'{i}' for i in range(10)]
  
 
 for text,i in zip(all_text,progressbar.progressbar(range(len(all_text)))):
-    text=text.replace(u'\u200c',' ') # Remove "nim fasele"
+    text=re.sub(r'/[u0620-\u064A\u0671-\u06D1\u200C-\u200D]/u', ' ',text) # replace "nim fasele" with Space
+    text=re.sub(r'/  +/g', ' ',text) # Replace more than space with one space
     text_words= word_tokenize(text)
     # Remove signs and string which contains numbers
     text_words=tuple(filter(lambda x:x not in signs and all(tuple(map(lambda y:y not in numbers and y not in signs,x))),text_words))
